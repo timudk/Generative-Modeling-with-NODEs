@@ -20,7 +20,3 @@ Follow instructions from https://github.com/gpapamak/maf and place them in `data
 
 ### VAE datasets
 Follow instructions from https://github.com/riannevdberg/sylvester-flows and place them in `data/`.
-
-<p align="center">
-<img align="middle" src="./assets/github_flow.gif" width="400" height="400" />
-</p>

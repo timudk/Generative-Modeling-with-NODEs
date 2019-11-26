@@ -1,0 +1,35 @@
+### 0 warmup steps
+
+# concat
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type concat --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type concat --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type concat --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1
+
+# squash
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type squash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type squash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type squash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1
+
+# concatsquash
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type concatsquash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type concatsquash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type concatsquash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 0 --rtol_start 1e-1 --atol_start 1e-1
+
+
+
+### 1000 warmup steps 
+
+# concat
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type concat --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type concat --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type concat --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1
+
+# squash
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type squash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type squash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type squash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1
+
+# concatsquash
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type concatsquash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type concatsquash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1 &&
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type concatsquash --solver adaptive_heun --rtol 1e-3 --atol 1e-3 --warmup_steps 1000 --rtol_start 1e-1 --atol_start 1e-1

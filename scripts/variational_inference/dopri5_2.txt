@@ -1,0 +1,35 @@
+### 0 warmup steps
+
+# concat
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type concat --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type concat --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type concat --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3
+
+# squash
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type squash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type squash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type squash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3
+
+# concatsquash
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type concatsquash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type concatsquash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type concatsquash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 0 --rtol_start 1e-3 --atol_start 1e-3
+
+
+
+### 1000 warmup steps 
+
+# concat
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type concat --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type concat --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type concat --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3
+
+# squash
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type squash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type squash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type squash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3
+
+# concatsquash
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 0 --automatic_saving True --layer_type concatsquash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 1 --automatic_saving True --layer_type concatsquash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3 
+python3 ../../train_vae_flow.py --data freyfaces --flow cnf_rank --rank 20 --num_blocks 2 --dims 512-512 --manual_seed 2 --automatic_saving True --layer_type concatsquash --solver dopri5 --rtol 1e-4 --atol 1e-4 --warmup_steps 1000 --rtol_start 1e-3 --atol_start 1e-3

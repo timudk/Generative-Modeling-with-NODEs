@@ -1,0 +1,72 @@
+### 0 warmup steps
+
+# concat
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 4 --automatic_saving True
+
+# squash
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 4 --automatic_saving True
+
+# concatsquash
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 0 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 4 --automatic_saving True
+
+
+
+### 1000 warmup steps
+
+# concat
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 4 --automatic_saving True
+
+# squash
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 4 --automatic_saving True
+
+# concatsquash
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-4 --atol 1e-4 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-4 --atol 1e-4 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-4 --atol 1e-4 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-4 --atol 1e-4 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 1000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-4 --atol 1e-4 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 4 --automatic_saving True
+
+
+
+### 10000 warmup steps
+
+# concat
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concat --manual_seed 4 --automatic_saving True
+
+# squash
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type squash --manual_seed 4 --automatic_saving True
+
+# concatsquash
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 0 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 1 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 2 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 3 --automatic_saving True &&
+python3 train_toy.py --warmup_steps 10000 --atol_start 1e-3 --rtol_start 1e-3 --rtol 1e-5 --atol 1e-5 --test_atol 1e-5 --test_rtol 1e-5 --solver dopri5 --data 8gaussians --val_freq 1000 --viz_freq 100000 --layer_type concatsquash --manual_seed 4 --automatic_saving True

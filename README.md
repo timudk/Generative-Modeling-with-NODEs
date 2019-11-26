@@ -15,8 +15,8 @@ Install `torchdiffeq` from https://github.com/rtqichen/torchdiffeq.
 
 ## Datasets
 
-### Tabular (UCI + BSDS300)
+### Tabular datasets
 Follow instructions from https://github.com/gpapamak/maf and place them in `data/`.
 
-### VAE datasets
+### Variational inference datasets
 Follow instructions from https://github.com/riannevdberg/sylvester-flows and place them in `data/`.

@@ -15,8 +15,8 @@ Install `torchdiffeq` from https://github.com/rtqichen/torchdiffeq.
 
 ## Datasets
 
-### Tabular datasets
-Follow instructions from https://github.com/gpapamak/maf and place them in `data/`.
+Download the required data using the following command:
 
-### Variational inference datasets
-Follow instructions from https://github.com/riannevdberg/sylvester-flows and place them in `data/`.
+```console
+foo@bar:~$ ./get_data.sh
+```

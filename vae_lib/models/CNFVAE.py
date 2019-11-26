@@ -8,6 +8,8 @@ from lib.layers.odefunc import NONLINEARITIES
 
 from torchdiffeq import odeint_adjoint as odeint
 
+import numpy as np
+
 
 def get_hidden_dims(args):
     return tuple(map(int, args.dims.split("-"))) + (args.z_size,)
@@ -330,6 +332,17 @@ class AmortizedCNFVAE(VAE):
         self.rtol = args.rtol
         self.solver = args.solver
 
+        self.test_atol = args.test_atol
+        self.test_rtol = args.test_rtol
+        self.test_solver = args.test_solver
+
+        self.atol_start = args.atol_start
+        self.rtol_start = args.rtol_start
+
+        self.decay_factors = {}
+        self.decay_factors['atol'] = args.warmup_steps / np.log(args.atol_start / args.atol)
+        self.decay_factors['rtol'] = args.warmup_steps / np.log(args.rtol_start / args.rtol)
+
     def encode(self, x):
         """
         Encoder that ouputs parameters for base distribution of z and flow parameters.
@@ -343,7 +356,15 @@ class AmortizedCNFVAE(VAE):
 
         return mean_z, var_z, am_params
 
-    def forward(self, x):
+    def forward(self, x, is_eval=None, epoch=None):
+        if is_eval is False:
+            atol = max(self.atol, self.atol_start * np.exp(-epoch / self.decay_factors['atol']))
+            rtol = max(self.rtol, self.rtol_start * np.exp(-epoch / self.decay_factors['rtol']))
+            solver = self.solver
+        else:
+            atol = self.test_atol
+            rtol = self.test_rtol
+            solver = self.test_solver
 
         self.log_det_j = 0.
 
@@ -355,15 +376,17 @@ class AmortizedCNFVAE(VAE):
         delta_logp = torch.zeros(x.shape[0], 1).to(x)
         z = z0
         for odefunc, am_param in zip(self.odefuncs, am_params):
+            print(atol)
+            print(solver)
             am_param_unpacked = odefunc.diffeq._unpack_params(am_param)
             odefunc.before_odeint()
             states = odeint(
                 odefunc,
                 (z, delta_logp) + tuple(am_param_unpacked),
                 self.integration_times.to(z),
-                atol=self.atol,
-                rtol=self.rtol,
-                method=self.solver,
+                atol=atol,
+                rtol=rtol,
+                method=solver,
             )
             z, delta_logp = states[0][-1], states[1][-1]
 

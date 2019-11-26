@@ -10,7 +10,7 @@ import numpy as np
 from train_misc import count_nfe, override_divergence_fn
 
 
-def train(epoch, train_loader, model, opt, args, logger):
+def train(epoch, train_loader, model, opt, args, logger, nfef_meter=None, nfeb_meter=None):
 
     model.train()
     train_loss = np.zeros(len(train_loader))
@@ -32,7 +32,7 @@ def train(epoch, train_loader, model, opt, args, logger):
         data = data.view(-1, *args.input_size)
 
         opt.zero_grad()
-        x_mean, z_mu, z_var, ldj, z0, zk = model(data)
+        x_mean, z_mu, z_var, ldj, z0, zk = model(data, is_eval=False, epoch=epoch)
 
         if 'cnf' in args.flow:
             f_nfe = count_nfe(model)
@@ -44,6 +44,9 @@ def train(epoch, train_loader, model, opt, args, logger):
         if 'cnf' in args.flow:
             t_nfe = count_nfe(model)
             b_nfe = t_nfe - f_nfe
+
+            nfef_meter.update(f_nfe)
+            nfeb_meter.update(b_nfe)
 
         train_loss[batch_idx] = loss.item()
         train_bpd[batch_idx] = bpd
@@ -74,7 +77,7 @@ def train(epoch, train_loader, model, opt, args, logger):
                                      bpd), '\trec: {:11.3f}\tkl: {:11.6f}'.format(rec, kl)
                 log_msg = "".join(log_msg)
             if 'cnf' in args.flow:
-                log_msg += ' | NFE Forward {} | NFE Backward {}'.format(f_nfe, b_nfe)
+                log_msg += ' | NFE Forward {:.0f}({:.1f}) | NFE Backward {:.0f}({:.1f})'.format(f_nfe, nfef_meter.avg, b_nfe, nfeb_meter.avg)
             logger.info(log_msg)
 
     if args.input_type == 'binary':
@@ -85,7 +88,11 @@ def train(epoch, train_loader, model, opt, args, logger):
             format(epoch, train_loss.sum() / len(train_loader), train_bpd.sum() / len(train_loader))
         )
 
-    return train_loss
+    if 'cnf' not in args.flow:
+        return train_loss
+
+    else:
+        return train_loss, nfef_meter, nfeb_meter
 
 
 def evaluate(data_loader, model, args, logger, testing=False, epoch=0):
@@ -111,7 +118,7 @@ def evaluate(data_loader, model, args, logger, testing=False, epoch=0):
         with torch.no_grad():
             data = data.view(-1, *args.input_size)
 
-            x_mean, z_mu, z_var, ldj, z0, zk = model(data)
+            x_mean, z_mu, z_var, ldj, z0, zk = model(data, is_eval=True)
 
             batch_loss, rec, kl, batch_bpd = calculate_loss(x_mean, data, z_mu, z_var, z0, zk, ldj, args)
 

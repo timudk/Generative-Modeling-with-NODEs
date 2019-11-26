@@ -12,14 +12,14 @@ def standard_normal_logprob(z):
     return logZ - z.pow(2) / 2
 
 
-def set_cnf_options(args, model):
+def set_cnf_options(args, atol, rtol, model):
 
     def _set(module):
         if isinstance(module, layers.CNF):
             # Set training settings
             module.solver = args.solver
-            module.atol = args.atol
-            module.rtol = args.rtol
+            module.atol = atol
+            module.rtol = rtol
             if args.step_size is not None:
                 module.solver_options['step_size'] = args.step_size
 
@@ -195,6 +195,6 @@ def build_model_tabular(args, dims, regularization_fns=None):
         chain = bn_chain
     model = layers.SequentialFlow(chain)
 
-    set_cnf_options(args, model)
+    set_cnf_options(args, args.atol, args.rtol, model)
 
     return model

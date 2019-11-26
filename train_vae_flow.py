@@ -24,7 +24,9 @@ from vae_lib.optimization.training import train, evaluate
 from vae_lib.utils.load_data import load_dataset
 from vae_lib.utils.plotting import plot_training_curve
 
-SOLVERS = ["dopri5", "bdf", "rk4", "midpoint", 'adams', 'explicit_adams', 'fixed_adams']
+from train_misc import set_cnf_options, count_nfe, count_parameters, count_total_time
+
+SOLVERS = ["dopri5", "bdf", "rk4", "midpoint", 'adams', 'explicit_adams', 'fixed_adams', 'adaptive_heun']
 parser = argparse.ArgumentParser(description='PyTorch Sylvester Normalizing flows')
 
 parser.add_argument(
@@ -48,7 +50,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '-od', '--out_dir', type=str, default='snapshots', metavar='OUT_DIR',
+    '-od', '--out_dir', type=str, default='train_vae', metavar='OUT_DIR',
     help='output directory for model snapshots etc.'
 )
 
@@ -57,7 +59,7 @@ parser.add_argument(
     '-e', '--epochs', type=int, default=2000, metavar='EPOCHS', help='number of epochs to train (default: 2000)'
 )
 parser.add_argument(
-    '-es', '--early_stopping_epochs', type=int, default=35, metavar='EARLY_STOPPING',
+    '-es', '--early_stopping_epochs', type=int, default=100, metavar='EARLY_STOPPING',
     help='number of early stopping epochs'
 )
 
@@ -80,7 +82,7 @@ parser.add_argument(
 )
 parser.add_argument('-r', '--rank', type=int, default=1)
 parser.add_argument(
-    '-nf', '--num_flows', type=int, default=4, metavar='NUM_FLOWS',
+    '-nf', '--num_flows', type=int, default=1, metavar='NUM_FLOWS',
     help='Number of flow layers, ignored in absence of flows'
 )
 parser.add_argument(
@@ -118,9 +120,9 @@ parser.add_argument('--atol', type=float, default=1e-5)
 parser.add_argument('--rtol', type=float, default=1e-5)
 parser.add_argument("--step_size", type=float, default=None, help="Optional fixed step size.")
 
-parser.add_argument('--test_solver', type=str, default=None, choices=SOLVERS + [None])
-parser.add_argument('--test_atol', type=float, default=None)
-parser.add_argument('--test_rtol', type=float, default=None)
+parser.add_argument('--test_solver', type=str, default='dopri5', choices=SOLVERS + [None])
+parser.add_argument('--test_atol', type=float, default=1e-5)
+parser.add_argument('--test_rtol', type=float, default=1e-5)
 
 parser.add_argument('--residual', type=eval, default=False, choices=[True, False])
 parser.add_argument('--rademacher', type=eval, default=False, choices=[True, False])
@@ -131,6 +133,11 @@ parser.add_argument('--evaluate', type=eval, default=False, choices=[True, False
 parser.add_argument('--model_path', type=str, default='')
 parser.add_argument('--retrain_encoder', type=eval, default=False, choices=[True, False])
 
+parser.add_argument('--automatic_saving', type=eval, default=False, choices=[True, False])
+parser.add_argument('--warmup_steps', type=int, default=0)
+parser.add_argument('--atol_start', type=float, default=1e-6)
+parser.add_argument('--rtol_start', type=float, default=1e-4)
+
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -140,11 +147,23 @@ random.seed(args.manual_seed)
 torch.manual_seed(args.manual_seed)
 np.random.seed(args.manual_seed)
 
+decay_factors = {}
+decay_factors['atol'] = args.warmup_steps / np.log(args.atol_start / args.atol)
+decay_factors['rtol'] = args.warmup_steps / np.log(args.rtol_start / args.rtol)
+print(decay_factors)
+
 if args.cuda:
     # gpu device number
     torch.cuda.set_device(args.gpu_num)
 
 kwargs = {'num_workers': 0, 'pin_memory': True} if args.cuda else {}
+
+def update_tolerances(args, itr, decay_factors):
+    print(args.atol_start)
+    atol = max(args.atol, args.atol_start * np.exp(-itr / decay_factors['atol']))
+    rtol = max(args.rtol, args.rtol_start * np.exp(-itr / decay_factors['rtol']))
+    print('mama:', atol)
+    return atol, rtol
 
 
 def run(args, kwargs):
@@ -154,39 +173,16 @@ def run(args, kwargs):
     args.model_signature = str(datetime.datetime.now())[0:19].replace(' ', '_')
     args.model_signature = args.model_signature.replace(':', '_')
 
-    snapshots_path = os.path.join(args.out_dir, 'vae_' + args.dataset + '_')
-    snap_dir = snapshots_path + args.flow
+    if args.automatic_saving == True:
+        path = '{}/{}/{}/{}/{}/{}/{}/{}/{}/'.format(args.solver, args.dataset, args.layer_type, args.atol, args.rtol, args.atol_start, args.rtol_start, args.warmup_steps, args.manual_seed)
+    else:
+        path = 'test/'
 
-    if args.flow != 'no_flow':
-        snap_dir += '_' + 'num_flows_' + str(args.num_flows)
 
-    if args.flow == 'orthogonal':
-        snap_dir = snap_dir + '_num_vectors_' + str(args.num_ortho_vecs)
-    elif args.flow == 'orthogonalH':
-        snap_dir = snap_dir + '_num_householder_' + str(args.num_householder)
-    elif args.flow == 'iaf':
-        snap_dir = snap_dir + '_madehsize_' + str(args.made_h_size)
+    args.snap_dir = os.path.join(args.out_dir, path)
 
-    elif args.flow == 'permutation':
-        snap_dir = snap_dir + '_' + 'kernelsize_' + str(args.kernel_size)
-    elif args.flow == 'mixed':
-        snap_dir = snap_dir + '_' + 'num_householder_' + str(args.num_householder)
-    elif args.flow == 'cnf_rank':
-        snap_dir = snap_dir + '_rank_' + str(args.rank) + '_' + args.dims + '_num_blocks_' + str(args.num_blocks)
-    elif 'cnf' in args.flow:
-        snap_dir = snap_dir + '_' + args.dims + '_num_blocks_' + str(args.num_blocks)
-
-    if args.retrain_encoder:
-        snap_dir = snap_dir + '_retrain-encoder_'
-    elif args.evaluate:
-        snap_dir = snap_dir + '_evaluate_'
-
-    snap_dir = snap_dir + '__' + args.model_signature + '/'
-
-    args.snap_dir = snap_dir
-
-    if not os.path.exists(snap_dir):
-        os.makedirs(snap_dir)
+    if not os.path.exists(args.snap_dir):
+        os.makedirs(args.snap_dir)
 
     # logger
     utils.makedirs(args.snap_dir)
@@ -195,7 +191,7 @@ def run(args, kwargs):
     logger.info(args)
 
     # SAVING
-    torch.save(args, snap_dir + args.flow + '.config')
+    torch.save(args, args.snap_dir + 'config.config')
 
     # ==================================================================================================================
     # LOAD DATA
@@ -203,6 +199,9 @@ def run(args, kwargs):
     train_loader, val_loader, test_loader, args = load_dataset(args, **kwargs)
 
     if not args.evaluate:
+
+        nfef_meter = utils.AverageMeter()
+        nfeb_meter = utils.AverageMeter()
 
         # ==============================================================================================================
         # SELECT MODEL
@@ -248,6 +247,7 @@ def run(args, kwargs):
             model.cuda()
 
         logger.info(model)
+        logger.info("Number of trainable parameters: {}".format(count_parameters(model)))
 
         if args.retrain_encoder:
             parameters = []
@@ -276,9 +276,17 @@ def run(args, kwargs):
         train_times = []
 
         for epoch in range(1, args.epochs + 1):
+            atol, rtol = update_tolerances(args, epoch, decay_factors)
+            print(atol)
+            set_cnf_options(args, atol, rtol, model)
 
             t_start = time.time()
-            tr_loss = train(epoch, train_loader, model, optimizer, args, logger)
+
+            if 'cnf' not in args.flow:
+                tr_loss = train(epoch, train_loader, model, optimizer, args, logger)
+            else:
+                tr_loss, nfef_meter, nfeb_meter = train(epoch, train_loader, model, optimizer, args, logger, nfef_meter, nfeb_meter)
+
             train_loss.append(tr_loss)
             train_times.append(time.time() - t_start)
             logger.info('One training epoch took %.2f seconds' % (time.time() - t_start))
@@ -294,7 +302,7 @@ def run(args, kwargs):
                 if args.input_type != 'binary':
                     best_bpd = v_bpd
                 logger.info('->model saved<-')
-                torch.save(model, snap_dir + args.flow + '.model')
+                torch.save(model, args.snap_dir +  'model.model')
                 # torch.save(model, snap_dir + args.flow + '_' + args.architecture + '.model')
 
             elif (args.early_stopping_epochs > 0) and (epoch >= args.warmup):
@@ -319,7 +327,7 @@ def run(args, kwargs):
         train_loss = np.hstack(train_loss)
         val_loss = np.array(val_loss)
 
-        plot_training_curve(train_loss, val_loss, fname=snap_dir + '/training_curve_%s.pdf' % args.flow)
+        plot_training_curve(train_loss, val_loss, fname=args.snap_dir + '/training_curve.pdf')
 
         # training time per epoch
         train_times = np.array(train_times)
@@ -335,7 +343,7 @@ def run(args, kwargs):
         logger.info('Stopped after %d epochs' % epoch)
         logger.info('Average train time per epoch: %.2f +/- %.2f' % (mean_train_time, std_train_time))
 
-        final_model = torch.load(snap_dir + args.flow + '.model')
+        final_model = torch.load(args.snap_dir + 'model.model')
         validation_loss, validation_bpd = evaluate(val_loader, final_model, args, logger)
 
     else:
@@ -347,10 +355,6 @@ def run(args, kwargs):
     test_loss, test_bpd = evaluate(test_loader, final_model, args, logger, testing=True)
 
     logger.info('FINAL EVALUATION ON VALIDATION SET. ELBO (VAL): {:.4f}'.format(validation_loss))
-    logger.info('FINAL EVALUATION ON TEST SET. NLL (TEST): {:.4f}'.format(test_loss))
-    if args.input_type != 'binary':
-        logger.info('FINAL EVALUATION ON VALIDATION SET. ELBO (VAL) BPD : {:.4f}'.format(validation_bpd))
-        logger.info('FINAL EVALUATION ON TEST SET. NLL (TEST) BPD: {:.4f}'.format(test_bpd))
 
 
 if __name__ == "__main__":

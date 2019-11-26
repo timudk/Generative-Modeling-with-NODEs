@@ -1,6 +1,8 @@
 import argparse
 import os
 import time
+import numpy as np
+import random
 
 import torch
 
@@ -15,7 +17,7 @@ from train_misc import set_cnf_options, count_nfe, count_parameters, count_total
 from train_misc import create_regularization_fns, get_regularization, append_regularization_to_log
 from train_misc import build_model_tabular, override_divergence_fn
 
-SOLVERS = ["dopri5", "bdf", "rk4", "midpoint", 'adams', 'explicit_adams', 'fixed_adams']
+SOLVERS = ["dopri5", "bdf", "rk4", "midpoint", 'adams', 'explicit_adams', 'fixed_adams', 'adaptive_heun']
 parser = argparse.ArgumentParser('Continuous Normalizing Flow')
 parser.add_argument(
     '--data', choices=['power', 'gas', 'hepmass', 'miniboone', 'bsds300'], type=str, default='miniboone'
@@ -37,9 +39,9 @@ parser.add_argument('--atol', type=float, default=1e-8)
 parser.add_argument('--rtol', type=float, default=1e-6)
 parser.add_argument("--step_size", type=float, default=None, help="Optional fixed step size.")
 
-parser.add_argument('--test_solver', type=str, default=None, choices=SOLVERS + [None])
-parser.add_argument('--test_atol', type=float, default=None)
-parser.add_argument('--test_rtol', type=float, default=None)
+parser.add_argument('--test_solver', type=str, default='dopri5', choices=SOLVERS + [None])
+parser.add_argument('--test_atol', type=float, default=1e-8)
+parser.add_argument('--test_rtol', type=float, default=1e-6)
 
 parser.add_argument('--residual', type=eval, default=False, choices=[True, False])
 parser.add_argument('--rademacher', type=eval, default=False, choices=[True, False])
@@ -65,7 +67,28 @@ parser.add_argument('--save', type=str, default='experiments/cnf')
 parser.add_argument('--evaluate', action='store_true')
 parser.add_argument('--val_freq', type=int, default=200)
 parser.add_argument('--log_freq', type=int, default=10)
+
+parser.add_argument('--manual_seed', type=int, default=1, help='manual seed, if not given resorts to random seed.')
+parser.add_argument('--automatic_saving', type=eval, default=False, choices=[True, False])
+parser.add_argument('--warmup_steps', type=int, default=0)
+parser.add_argument('--atol_start', type=float, default=1e-6)
+parser.add_argument('--rtol_start', type=float, default=1e-4)
+
 args = parser.parse_args()
+
+if args.manual_seed is None:
+    args.manual_seed = random.randint(1, 100000)
+random.seed(args.manual_seed)
+torch.manual_seed(args.manual_seed)
+np.random.seed(args.manual_seed)
+
+if args.automatic_saving == True:
+    args.save = 'train_tabular/{}/{}/{}/{}/{}/{}/{}/{}/{}/{}/'.format(args.solver, args.data, args.layer_type, args.atol, args.rtol, args.atol_start, args.rtol_start, args.weight_decay, args.warmup_steps, args.manual_seed)
+
+decay_factors = {}
+decay_factors['atol'] = args.warmup_steps / np.log(args.atol_start / args.atol)
+decay_factors['rtol'] = args.warmup_steps / np.log(args.rtol_start / args.rtol)
+print(decay_factors)
 
 # logger
 utils.makedirs(args.save)
@@ -150,6 +173,12 @@ def restore_model(model, filename):
     model.load_state_dict(checkpt["state_dict"])
     return model
 
+def update_tolerances(args, itr, decay_factors):
+    atol = max(args.atol, args.atol_start * np.exp(-itr / decay_factors['atol']))
+    rtol = max(args.rtol, args.rtol_start * np.exp(-itr / decay_factors['rtol']))
+
+    return atol, rtol
+
 
 if __name__ == '__main__':
 
@@ -167,7 +196,6 @@ if __name__ == '__main__':
 
     regularization_fns, regularization_coeffs = create_regularization_fns(args)
     model = build_model_tabular(args, data.n_dims, regularization_fns).to(device)
-    set_cnf_options(args, model)
 
     for k in model.state_dict().keys():
         logger.info(k)
@@ -189,11 +217,11 @@ if __name__ == '__main__':
     if not args.evaluate:
         optimizer = Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
-        time_meter = utils.RunningAverageMeter(0.98)
-        loss_meter = utils.RunningAverageMeter(0.98)
-        nfef_meter = utils.RunningAverageMeter(0.98)
-        nfeb_meter = utils.RunningAverageMeter(0.98)
-        tt_meter = utils.RunningAverageMeter(0.98)
+        time_meter = utils.AverageMeter()
+        loss_meter = utils.AverageMeter()
+        nfef_meter = utils.AverageMeter()
+        nfeb_meter = utils.AverageMeter()
+        tt_meter = utils.AverageMeter()
 
         best_loss = float('inf')
         itr = 0
@@ -207,6 +235,11 @@ if __name__ == '__main__':
             for x in batch_iter(data.trn.x, shuffle=True):
                 if args.early_stopping > 0 and n_vals_without_improvement > args.early_stopping:
                     break
+
+                atol, rtol = update_tolerances(args, itr, decay_factors)
+                set_cnf_options(args, atol, rtol, model)
+                print(atol)
+                print(rtol)
 
                 optimizer.zero_grad()
 
@@ -287,7 +320,7 @@ if __name__ == '__main__':
 
         logger.info('Training has finished.')
         model = restore_model(model, os.path.join(args.save, 'checkpt.pth')).to(device)
-        set_cnf_options(args, model)
+        set_cnf_options(args, atol, rtol, model)
 
     logger.info('Evaluating model on test set.')
     model.eval()

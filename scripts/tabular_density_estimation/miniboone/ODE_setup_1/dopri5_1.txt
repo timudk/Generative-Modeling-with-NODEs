@@ -1,0 +1,35 @@
+### 0 warmup steps
+
+# concat
+python3 train_tabular.py --automatic_saving True --layer_type concat --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 0 
+python3 train_tabular.py --automatic_saving True --layer_type concat --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 1 
+python3 train_tabular.py --automatic_saving True --layer_type concat --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 2
+
+# squash
+python3 train_tabular.py --automatic_saving True --layer_type squash --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 0 
+python3 train_tabular.py --automatic_saving True --layer_type squash --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 1 
+python3 train_tabular.py --automatic_saving True --layer_type squash --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 2
+
+# concatsquash
+python3 train_tabular.py --automatic_saving True --layer_type concatsquash --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 0 
+python3 train_tabular.py --automatic_saving True --layer_type concatsquash --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 1 
+python3 train_tabular.py --automatic_saving True --layer_type concatsquash --hdim_factor 20 --nhidden 2 --warmup_steps 0 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 2
+
+
+
+### 10000 warmup steps
+
+# concat
+python3 train_tabular.py --automatic_saving True --layer_type concat --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 0 
+python3 train_tabular.py --automatic_saving True --layer_type concat --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 1 
+python3 train_tabular.py --automatic_saving True --layer_type concat --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 2
+
+# squash
+python3 train_tabular.py --automatic_saving True --layer_type squash --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 0 
+python3 train_tabular.py --automatic_saving True --layer_type squash --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 1 
+python3 train_tabular.py --automatic_saving True --layer_type squash --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 2
+
+# concatsquash
+python3 train_tabular.py --automatic_saving True --layer_type concatsquash --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 0 
+python3 train_tabular.py --automatic_saving True --layer_type concatsquash --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 1 
+python3 train_tabular.py --automatic_saving True --layer_type concatsquash --hdim_factor 20 --nhidden 2 --warmup_steps 10000 --rtol_start 1e-4 --atol_start 1e-6 --log_freq 10 --manual_seed 2

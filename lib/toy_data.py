@@ -5,9 +5,28 @@ from sklearn.utils import shuffle as util_shuffle
 
 
 # Dataset iterator
-def inf_train_gen(data, rng=None, batch_size=200):
+def inf_train_gen(data, rng=None, batch_size=200, mc_train=0, aug_dim=0):
     if rng is None:
         rng = np.random.RandomState()
+
+    if data == "mixture_gaussian_1_augmented":
+        w = np.random.choice(np.arange(0, 3), batch_size, p=[0.35, 0.35, 0.3])
+
+        n_aug = aug_dim
+        n_monte_carlo = mc_train
+        mu = [-6, -2, 4]
+        sigma = [1, 1, 1]
+
+        x = []
+        for _, w_i in enumerate(w):
+            x.append(np.random.normal(mu[w_i], sigma[w_i]**2))
+
+        x = np.reshape(np.array(x), (len(x), 1))
+        x_prep = np.concatenate([x]*n_monte_carlo)
+
+        aug_normal = np.random.normal(size=(n_monte_carlo*len(x), n_aug))
+
+        return np.concatenate((x_prep, aug_normal), axis=1)
 
     if data == "swissroll":
         data = sklearn.datasets.make_swiss_roll(n_samples=batch_size, noise=1.0)[0]

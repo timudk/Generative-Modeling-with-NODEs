@@ -32,6 +32,31 @@ class HyperLinear(nn.Module):
         w = params[self.dim_out:].view(self.dim_out, self.dim_in)
         return F.linear(x, w, b)
 
+class HyperHamiltonianLinear(nn.Module):
+    def __init__(self, dim_1, dim_2, hypernet_dim=8, n_hidden=1, activation=nn.Tanh):
+        super(HyperLinear, self).__init__()
+        self.dim_in = dim_in
+        self.dim_out = dim_out
+        self.params_dim = 2 * self.dim_1 * self.dim_2 + self.dim_1 + self.dim_2
+
+        layers = []
+        dims = [1] + [hypernet_dim] * n_hidden + [self.params_dim]
+        for i in range(1, len(dims)):
+            layers.append(nn.Linear(dims[i - 1], dims[i]))
+            if i < len(dims) - 1:
+                layers.append(activation())
+        self._hypernet = nn.Sequential(*layers)
+        self._hypernet.apply(weights_init)
+
+    def forward(self, t, x):
+        params = self._hypernet(t.view(1, 1)).view(-1)
+        b_1 = params[:self.dim_1].view(self.dim_1)
+        b_2 = params[self.dim_1:(self.dim_1+self.dim_2)].view(self.dim_2)
+
+        w_1 = params[(self.dim_1+self.dim_2):(self.dim_1+self.dim_2+self.dim_1*self.dim_2)].view(self.dim_1, self.dim_2)
+        w_1 = params[(self.dim_1+self.dim_2+self.dim_1*self.dim_2):].view(self.dim_2, self.dim_1)
+        return F.linear(x, w, b)
+
 
 class IgnoreLinear(nn.Module):
     def __init__(self, dim_in, dim_out):
